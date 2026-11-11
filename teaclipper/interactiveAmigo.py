@@ -1289,8 +1289,8 @@ class InteractivePatternPlotter:
         warnings.simplefilter('ignore')
 
         # read in the chosen parameters and relevant filenames in the inlist
-        config_file = files(amigo).joinpath('../defaults/config.dat')
-        def_num = files(amigo).joinpath('../defaults/default_numerical.dat')
+        config_file = files(amigo).joinpath('defaults/config.dat')
+        def_num = files(amigo).joinpath('defaults/default_numerical.dat')
 
         # Reading in the main config files
         with open(config_file, 'r', encoding="utf-8") as file:

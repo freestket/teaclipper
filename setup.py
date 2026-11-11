@@ -9,7 +9,7 @@ from setuptools import setup
 # package version
 MAJOR = 1
 MINOR = 1
-ATTR = 0
+ATTR = 1
 
 # full acronym
 ACRONYM = ('TEss Asteroseismic Combined LIght curve Pipeline for PERiod spacings')
