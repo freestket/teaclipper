@@ -85,7 +85,7 @@ def TU2STS_single(inpath, outpath):
                                               index=False)
 
 
-def prewhitening(TIC, indir='./STS/', red_name='', FLOSSY=False, EB=False):
+def prewhitening(TIC, sn_thr: float, indir='./STS/', red_name='', FLOSSY=False, EB=False):
     """
     Do the pre-whitening with STS and create FLOSSY compatible files.
 
@@ -135,13 +135,13 @@ def prewhitening(TIC, indir='./STS/', red_name='', FLOSSY=False, EB=False):
     # plotting
     plot_dir = f'{indir}{red_name}/'
     sts.ut.sequential_plotting(times, signal, signal_err, i_sectors, Path(lcpath).stem,
-                               plot_dir, save_dir=plot_dir, show=False)
+                               plot_dir, sn_thr=sn_thr, save_dir=plot_dir, show=False)
 
     if FLOSSY:
         make_FLOSSY_input(TIC, times, signal, indir=f'{indir}{red_name}/', EB=EB)
 
 
-def prewhiten_all(TICs, LCdir='./TU/', red_name='', prepare=True, version='detrended',
+def prewhiten_all(TICs, sn_thr: float, LCdir='./TU/', red_name='', prepare=True, version='detrended',
                   FLOSSY=False, EB=False):
     """
     Main function to pre-whiten all LC as retrieved from TU.
@@ -150,6 +150,8 @@ def prewhiten_all(TICs, LCdir='./TU/', red_name='', prepare=True, version='detre
     ----------
     TICs : list-like
         Holds your TIC IDs.
+    sn_thr: float
+        Threshold for signal-to-noise ratio for a signal to be accepted as signficant
     LCdir : str, optional
         Root of your Tessutils directory. The default is './TU/'.
     red_name : str, optional
@@ -179,7 +181,7 @@ def prewhiten_all(TICs, LCdir='./TU/', red_name='', prepare=True, version='detre
 
     for TIC in TICs:
         try:
-            prewhitening(TIC, indir=indir, red_name=red_name, FLOSSY=FLOSSY, EB=EB)
+            prewhitening(TIC, sn_thr=sn_thr, indir=indir, red_name=red_name, FLOSSY=FLOSSY, EB=EB)
         except FileNotFoundError:
             continue
 
