@@ -19,7 +19,8 @@ def run_tu(TIC, LCdir='./TU/', red_name="", ncores=8, download=True,
            delta_mag=4.5, aperture_mask_threshold=8,
            contamination_level=0.001, aperture_type='auto', extract=True,
            aperture_mask_max_elongation=30, excluded_intervals=None,
-           imsize=25, forced_size=[2, 2]):
+           imsize=25, forced_size=[2, 2],
+           max_num_of_pc=7, pc_th_variance=None):
     '''
     Entry point to reduce a large number of TESS FFI for use in asteroseismology.
     This script can take many TIC IDs and produce its light curves in an automated way.
@@ -132,12 +133,13 @@ def run_tu(TIC, LCdir='./TU/', red_name="", ncores=8, download=True,
 
     # set the number of pc bins and threshold value according to the time resolution
     # TODO: this is just a tempory work around, should be implemented in TU properly
-    if (sectors is None) or (sectors[0] > 55):
-        num_of_pc_bins = 120
-        pc_th_variance = 2.5e-6
-    else:
-        num_of_pc_bins = 40
-        pc_th_variance = 1e-5
+    if pc_th_variance is None:
+        if (sectors is None) or (sectors[0] > 55):
+            num_of_pc_bins = 120
+            pc_th_variance = 2.5e-6
+        else:
+            num_of_pc_bins = 40
+            pc_th_variance = 1e-5
 
     if extract:
         tu.reduction.extract_light_curve(np.array(TPF_files),
@@ -147,7 +149,7 @@ def run_tu(TIC, LCdir='./TU/', red_name="", ncores=8, download=True,
                                          outputdir=lc_dir,
                                          aperture_mask_threshold=aperture_mask_threshold,
                                          aperture_mask_min_pixels=1,
-                                         max_num_of_pc=7,
+                                         max_num_of_pc=max_num_of_pc,
                                          aperture_mask_max_elongation=aperture_mask_max_elongation,
                                          contamination_level=contamination_level,
                                          num_of_pc_bins=num_of_pc_bins,
